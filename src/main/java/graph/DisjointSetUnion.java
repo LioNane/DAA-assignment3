@@ -1,4 +1,4 @@
-package graph_algorithms;
+package graph;
 
 public class DisjointSetUnion {
     private int[] parent;
