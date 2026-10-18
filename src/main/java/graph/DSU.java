@@ -1,10 +1,10 @@
-package graph_algorithms;
+package graph;
 
-public class DisjointSetUnion {
+public class DSU {
     private int[] parent;
     private int[] rank;
 
-    public DisjointSetUnion(int n) {
+    public DSU(int n) {
         parent = new int[n];
         rank = new int[n];
         for (int i = 0; i < n; i++) {
