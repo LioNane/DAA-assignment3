@@ -1,4 +1,4 @@
-package scc;
+package dag;
 
 import graph.Graph;
 
