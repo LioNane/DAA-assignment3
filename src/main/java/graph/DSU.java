@@ -1,5 +1,7 @@
 package graph;
 
+import metrics.Metrics;
+
 public class DSU {
     private int[] parent;
     private int[] rank;
@@ -12,16 +14,17 @@ public class DSU {
         }
     }
 
-    public int find(int x) {
+    public int find(int x, Metrics metrics) {
+        metrics.addDsuOp();
         if (parent[x] != x) {
-            parent[x] = find(parent[x]);
+            parent[x] = find(parent[x], metrics);
         }
         return parent[x];
     }
 
-    public void union(int x, int y) {
-        int rootX = find(x);
-        int rootY = find(y);
+    public void union(int x, int y, Metrics metrics) {
+        int rootX = find(x, metrics);
+        int rootY = find(y, metrics);
 
         if (rootX == rootY) {
             return;
@@ -35,5 +38,7 @@ public class DSU {
             parent[rootY] = rootX;
             rank[rootX]++;
         }
+
+        metrics.addDsuOp();
     }
 }

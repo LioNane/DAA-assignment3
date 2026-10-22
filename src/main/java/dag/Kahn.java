@@ -1,6 +1,7 @@
 package dag;
 
 import graph.Graph;
+import metrics.Metrics;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ public class Kahn {
         }
     }
 
-    public static Result topologicalSort(Graph graph) {
+    public static Result topologicalSort(Graph graph, Metrics metrics) {
         int n = graph.getV();
         int[] inDegree = new int[n];
 
@@ -27,6 +28,7 @@ public class Kahn {
             List<Graph.Edge> edges = graph.getAdj(u);
             if (edges != null) {
                 for (Graph.Edge edge : edges) {
+                    metrics.addEdgeScan();
                     inDegree[edge.to]++;
                 }
             }
@@ -48,6 +50,7 @@ public class Kahn {
             List<Graph.Edge> edges = graph.getAdj(u);
             if (edges != null) {
                 for (Graph.Edge edge : edges) {
+                    metrics.addEdgeScan();
                     int v = edge.to;
                     inDegree[v]--;
 
