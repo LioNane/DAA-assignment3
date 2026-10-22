@@ -102,7 +102,7 @@ private static long runTest(String algorithmName, String density, int n, int m, 
     }
 
     double medianTime = calculateMedian(times);
-    writer.printf("%s,%s,%d,%d,%.3f,%d,%d,%d,%d,%d%n",
+    writer.printf(java.util.Locale.US, "%s,%s,%d,%d,%.3f,%d,%d,%d,%d,%d%n",
             algorithmName, density, n, m, medianTime,
             metrics.getDsuOps(), metrics.getEdgeScans(), metrics.getComparisons(), metrics.getMaxDepth(), result);
     return result;
