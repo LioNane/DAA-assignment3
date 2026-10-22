@@ -25,7 +25,7 @@ public class Metrics {
 
     public void startTimer() { startTime = System.nanoTime(); }
     public void stopTimer() { endTime = System.nanoTime(); }
-    public long getTimeNs() { return endTime - startTime; }
+    public double getTimeMs() { return (endTime - startTime) / 1000000.0; }
 
     public void reset() {
         dsuOps = 0;
