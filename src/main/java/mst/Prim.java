@@ -1,15 +1,20 @@
 package mst;
 
 import graph.Graph;
+import metrics.Metrics;
 
 import java.util.PriorityQueue;
 
 public class Prim {
 
-    public static Result findMST(Graph graph) {
+    public static Result findMST(Graph graph, Metrics metrics) {
         int n = graph.getV();
         boolean[] inMST = new boolean[n];
-        PriorityQueue<Edge> pq = new PriorityQueue<>();
+        PriorityQueue<Edge> pq = new PriorityQueue<>((e1, e2) -> {
+            metrics.addComparison();
+            return Integer.compare(e1.weight, e2.weight);
+        });
+
         long totalWeight = 0;
         int components = 0;
 
@@ -31,6 +36,7 @@ public class Prim {
                     totalWeight += minEdge.weight;
 
                     for (Graph.Edge adjEdge : graph.getAdj(currentVertex)) {
+                        metrics.addEdgeScan();
                         if (!inMST[adjEdge.to]) {
                             pq.add(new Edge(currentVertex, adjEdge.to, adjEdge.weight));
                         }

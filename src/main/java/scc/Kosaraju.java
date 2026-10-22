@@ -1,6 +1,7 @@
 package scc;
 
 import graph.Graph;
+import metrics.Metrics;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -17,14 +18,14 @@ public class Kosaraju {
         }
     }
 
-    public static Result findSCC(Graph graph) {
+    public static Result findSCC(Graph graph, Metrics metrics) {
         int n = graph.getV();
         List<Integer> finishOrder = new ArrayList<>(n);
         boolean[] visited = new boolean[n];
 
         for (int i = 0; i < n; i++) {
             if (!visited[i]) {
-                iterativeDFS1(graph, i, visited, finishOrder);
+                iterativeDFS1(graph, i, visited, finishOrder, metrics);
             }
         }
 
@@ -38,7 +39,7 @@ public class Kosaraju {
             int vertex = finishOrder.get(i);
             if (!visited2[vertex]) {
                 componentsCount++;
-                iterativeDFS2(reversedGraph, vertex, visited2);
+                iterativeDFS2(reversedGraph, vertex, visited2, metrics);
             }
         }
 
@@ -61,7 +62,7 @@ public class Kosaraju {
         return reversed;
     }
 
-    private static void iterativeDFS1(Graph graph, int start, boolean[] visited, List<Integer> finishOrder) {
+    private static void iterativeDFS1(Graph graph, int start, boolean[] visited, List<Integer> finishOrder, Metrics metrics) {
         Deque<Integer> stack = new ArrayDeque<>();
         int[] edgeIndex = new int[graph.getV()];
 
@@ -69,10 +70,13 @@ public class Kosaraju {
         visited[start] = true;
 
         while (!stack.isEmpty()) {
+            metrics.updateDepth(stack.size());
             int u = stack.peek();
             List<Graph.Edge> edges = graph.getAdj(u);
 
             if (edges != null && edgeIndex[u] < edges.size()) {
+                metrics.addEdgeScan();
+
                 int v = edges.get(edgeIndex[u]).to;
                 edgeIndex[u]++;
 
@@ -87,18 +91,20 @@ public class Kosaraju {
         }
     }
 
-    private static void iterativeDFS2(Graph graph, int start, boolean[] visited) {
+    private static void iterativeDFS2(Graph graph, int start, boolean[] visited, Metrics metrics) {
         Deque<Integer> stack = new ArrayDeque<>();
 
         stack.push(start);
         visited[start] = true;
 
         while (!stack.isEmpty()) {
+            metrics.updateDepth(stack.size());
             int u = stack.pop();
 
             List<Graph.Edge> edges = graph.getAdj(u);
             if (edges != null) {
                 for (Graph.Edge edge : edges) {
+                    metrics.addEdgeScan();
                     int v = edge.to;
                     if (!visited[v]) {
                         visited[v] = true;

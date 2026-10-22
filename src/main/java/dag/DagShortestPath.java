@@ -1,6 +1,7 @@
 package dag;
 
 import graph.Graph;
+import metrics.Metrics;
 
 import java.util.Arrays;
 import java.util.List;
@@ -19,10 +20,10 @@ public class DagShortestPath {
         }
     }
 
-    public static Result findShortestPaths(Graph graph) {
+    public static Result findShortestPaths(Graph graph, Metrics metrics) {
         int n = graph.getV();
 
-        Kahn.Result kahnResult = Kahn.topologicalSort(graph);
+        Kahn.Result kahnResult = Kahn.topologicalSort(graph, metrics);
         if (kahnResult.hasCycle) {
             throw new IllegalStateException("Graph has a cycle. DAG Shortest Path is not applicable.");
         }
@@ -39,6 +40,7 @@ public class DagShortestPath {
             List<Graph.Edge> edges = graph.getAdj(u);
             if (edges != null) {
                 for (Graph.Edge edge : edges) {
+                    metrics.addEdgeScan();
                     inDegree[edge.to]++;
                 }
             }
@@ -55,6 +57,7 @@ public class DagShortestPath {
                 List<Graph.Edge> edges = graph.getAdj(u);
                 if (edges != null) {
                     for (Graph.Edge edge : edges) {
+                        metrics.addEdgeScan();
                         int v = edge.to;
                         int weight = edge.weight;
 
