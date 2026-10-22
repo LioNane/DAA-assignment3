@@ -5,10 +5,12 @@ import metrics.Metrics;
 public class DSU {
     private int[] parent;
     private int[] rank;
+    private int componentsCount;
 
     public DSU(int n) {
         parent = new int[n];
         rank = new int[n];
+        componentsCount = n;
         for (int i = 0; i < n; i++) {
             parent[i] = i;
         }
@@ -39,6 +41,11 @@ public class DSU {
             rank[rootX]++;
         }
 
+        componentsCount--;
         metrics.addDsuOp();
+    }
+
+    public int components() {
+        return componentsCount;
     }
 }
